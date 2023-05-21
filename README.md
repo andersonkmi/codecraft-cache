@@ -1,2 +1,2 @@
-# codecraft-cache
-Simple caching application
+# Codecraft labs Simple cache
+Simple caching application - just for experimentation purposes
