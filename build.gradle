@@ -28,9 +28,8 @@ dependencies {
 
 	// Test related dependencies
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.16.2'
-	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.16.2'
 	testImplementation 'org.hamcrest:hamcrest-library:2.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 }
 
 test {
