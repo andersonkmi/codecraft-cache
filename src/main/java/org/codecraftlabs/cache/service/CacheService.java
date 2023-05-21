@@ -17,9 +17,13 @@ public class CacheService {
         this.cacheEntryValidator = cacheEntryValidator;
     }
 
-    public void upsert(@Nonnull CacheEntry cacheEntry) {
+    public void insert(@Nonnull CacheEntry cacheEntry) {
         this.cacheEntryValidator.validate(cacheEntry);
         // nothing implemented yet
+    }
+
+    public void update(@Nonnull CacheEntry cacheEntry) {
+        this.cacheEntryValidator.validate(cacheEntry);
     }
 
     public Optional<CacheEntry> retrieve(@Nonnull String key) {
