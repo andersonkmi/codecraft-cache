@@ -26,7 +26,7 @@ public class CacheRepository {
     }
 
     public void update(@Nonnull CacheEntry cacheEntry) {
-        if (! cache.containsKey(cacheEntry.getKey())) {
+        if (!cache.containsKey(cacheEntry.getKey())) {
             logger.warn("Cache item not found: " + cacheEntry);
             return;
         }

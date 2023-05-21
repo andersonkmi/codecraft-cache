@@ -47,6 +47,23 @@ public class CacheRepositoryTest {
         assertEquals(item, returnedItem.get());
     }
 
+    @Test
+    public void testUpdateExistingCacheItemSuccess() {
+        CacheEntry entry = createCacheEntry("key002", "value002");
+        this.cacheRepository.insert(entry);
+        assertEquals(1, cacheRepository.getCacheSize());
+        Optional<CacheEntry> returnedItem = cacheRepository.getItem("key002");
+        assertTrue(returnedItem.isPresent());
+        assertEquals(entry, returnedItem.get());
+
+        // Update an existing item
+        entry.setValue("value002 - changed");
+        this.cacheRepository.update(entry);
+        returnedItem = cacheRepository.getItem("key002");
+        assertTrue(returnedItem.isPresent());
+        assertEquals(entry, returnedItem.get());
+    }
+
     @Nonnull
     private CacheEntry createCacheEntry(@Nonnull String key, @Nonnull String value) {
         CacheEntry item = new CacheEntry();
