@@ -38,6 +38,12 @@ public class CacheEntry {
         }
 
         CacheEntry instance = (CacheEntry) other;
-        return Objects.equals(this.getKey(), instance.getKey());
+        return Objects.equals(this.getKey(), instance.getKey()) &&
+                Objects.equals(getValue(), instance.getValue());
+    }
+
+    @Override
+    public String toString() {
+        return "[key = '" + key + "', value = '" + value + "']";
     }
 }
