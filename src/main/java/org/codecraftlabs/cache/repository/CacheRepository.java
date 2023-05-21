@@ -17,6 +17,10 @@ public class CacheRepository {
     private final Map<String, String> cache = new ConcurrentHashMap<>();
 
     public void insert(@Nonnull CacheEntry cacheEntry) {
+        if (this.cache.containsKey(cacheEntry.getKey())) {
+            logger.info("Cache item already present:" + cacheEntry);
+            return;
+        }
         logger.info("Inserting new cache item: " + cacheEntry);
         this.cache.put(cacheEntry.getKey(), cacheEntry.getValue());
     }
