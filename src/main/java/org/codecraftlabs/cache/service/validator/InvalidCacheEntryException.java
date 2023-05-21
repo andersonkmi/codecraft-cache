@@ -1,4 +1,4 @@
-package org.codecraftlabs.cache.service;
+package org.codecraftlabs.cache.service.validator;
 
 public class InvalidCacheEntryException extends RuntimeException {
     public InvalidCacheEntryException(String message) {
