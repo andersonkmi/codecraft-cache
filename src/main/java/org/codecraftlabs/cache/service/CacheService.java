@@ -4,6 +4,7 @@ import org.codecraftlabs.cache.model.CacheEntry;
 import org.codecraftlabs.cache.repository.CacheRepository;
 import org.codecraftlabs.cache.service.validator.CacheEntryValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class CacheService {
     private final CacheEntryValidator cacheEntryValidator;
 
+    @Qualifier("simpleCacheRepository")
     private final CacheRepository cacheRepository;
 
     @Autowired
