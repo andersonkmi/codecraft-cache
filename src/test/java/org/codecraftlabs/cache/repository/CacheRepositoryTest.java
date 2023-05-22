@@ -73,6 +73,19 @@ public class CacheRepositoryTest {
         assertTrue(returnedItem.isEmpty());
     }
 
+    @Test
+    public void testRemoveItemFromCache() {
+        CacheEntry entry = createCacheEntry("key002", "value002");
+        this.cacheRepository.insert(entry);
+        assertEquals(1, cacheRepository.getCacheSize());
+        Optional<CacheEntry> returnedItem = cacheRepository.getItem("key002");
+        assertTrue(returnedItem.isPresent());
+        assertEquals(entry, returnedItem.get());
+
+        this.cacheRepository.remove("key002");
+        assertEquals(0, cacheRepository.getCacheSize());
+    }
+
     @Nonnull
     private CacheEntry createCacheEntry(@Nonnull String key, @Nonnull String value) {
         CacheEntry item = new CacheEntry();
