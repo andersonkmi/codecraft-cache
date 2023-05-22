@@ -52,6 +52,7 @@ public class CacheRepository {
         return this.cache.size();
     }
 
+    @Nonnull
     public Optional<CacheEntry> getItem(@Nonnull String key) {
         String value = this.cache.get(key);
         if (value == null) {

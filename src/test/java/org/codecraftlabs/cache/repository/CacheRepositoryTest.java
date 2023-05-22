@@ -86,6 +86,20 @@ public class CacheRepositoryTest {
         assertEquals(0, cacheRepository.getCacheSize());
     }
 
+    @Test
+    public void clearCache() {
+        CacheEntry item = createCacheEntry("key001", "value001");
+        this.cacheRepository.insert(item);
+        assertEquals(1, cacheRepository.getCacheSize());
+        CacheEntry item2 = createCacheEntry("key002", "value002");
+        this.cacheRepository.insert(item2);
+        assertEquals(2, cacheRepository.getCacheSize());
+
+        // Clear cache
+        this.cacheRepository.clear();
+        assertEquals(0, cacheRepository.getCacheSize());
+    }
+
     @Nonnull
     private CacheEntry createCacheEntry(@Nonnull String key, @Nonnull String value) {
         CacheEntry item = new CacheEntry();
