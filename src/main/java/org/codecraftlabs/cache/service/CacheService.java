@@ -1,6 +1,7 @@
 package org.codecraftlabs.cache.service;
 
 import org.codecraftlabs.cache.model.CacheEntry;
+import org.codecraftlabs.cache.repository.CacheRepository;
 import org.codecraftlabs.cache.service.validator.CacheEntryValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,29 +13,57 @@ import java.util.Optional;
 public class CacheService {
     private final CacheEntryValidator cacheEntryValidator;
 
+    private final CacheRepository cacheRepository;
+
     @Autowired
-    public CacheService(@Nonnull CacheEntryValidator cacheEntryValidator) {
+    public CacheService(@Nonnull CacheEntryValidator cacheEntryValidator, @Nonnull CacheRepository cacheRepository) {
         this.cacheEntryValidator = cacheEntryValidator;
+        this.cacheRepository = cacheRepository;
     }
 
+    /**
+     * Inserts a new item into the cache
+     * @param cacheEntry Cache item to be inserted
+     * @throws org.codecraftlabs.cache.service.validator.InvalidCacheEntryException If the cache entry does not have
+     * either key or value configured.
+     */
     public void insert(@Nonnull CacheEntry cacheEntry) {
         this.cacheEntryValidator.validate(cacheEntry);
-        // nothing implemented yet
+        this.cacheRepository.insert(cacheEntry);
     }
 
+    /**
+     * Updates an existing item in the cache
+     * @param cacheEntry Cache item to be inserted
+     * @throws org.codecraftlabs.cache.service.validator.InvalidCacheEntryException If the cache entry does not have
+     * either key or value configured.
+     */
     public void update(@Nonnull CacheEntry cacheEntry) {
         this.cacheEntryValidator.validate(cacheEntry);
+        this.cacheRepository.update(cacheEntry);
     }
 
+    /**
+     * Retrieves the cache item associated with the informed key.
+     * @param key Key linked to the cache item
+     * @return Cache entry if present, otherwise an empty item.
+     */
     public Optional<CacheEntry> retrieve(@Nonnull String key) {
-        return Optional.empty();
+        return this.cacheRepository.getItem(key);
     }
 
+    /**
+     * Removes an item from the cache linked to the specified key.
+     * @param key Cache item key.
+     */
     public void remove(@Nonnull String key) {
-        // Nothing implemented yet
+        this.cacheRepository.remove(key);
     }
 
+    /**
+     * Removes all items from the cache.
+     */
     public void clear() {
-        // Nothing implemented yet
+        this.cacheRepository.clear();
     }
 }

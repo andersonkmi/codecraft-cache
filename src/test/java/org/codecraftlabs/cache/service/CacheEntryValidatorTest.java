@@ -48,4 +48,13 @@ public class CacheEntryValidatorTest {
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
         Assertions.assertEquals("Empty value", exception.getMessage());
     }
+
+    @Test
+    public void whenInvalidJsonShouldThrowException() {
+        CacheEntry cacheEntry = new CacheEntry();
+        cacheEntry.setKey("key");
+        cacheEntry.setValue("NotvalidJsonAtAll");
+        InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
+        Assertions.assertEquals("JSON value is malformed", exception.getMessage());
+    }
 }
