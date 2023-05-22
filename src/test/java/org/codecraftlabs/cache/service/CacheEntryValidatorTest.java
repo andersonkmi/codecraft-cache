@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class CacheEntryValidatorTest {
     private CacheEntryValidator cacheEntryValidator;
 
@@ -20,7 +23,7 @@ public class CacheEntryValidatorTest {
         CacheEntry cacheEntry = new CacheEntry();
         cacheEntry.setValue("Simple value");
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
-        Assertions.assertEquals("Null key", exception.getMessage());
+        assertEquals("Null key", exception.getMessage());
     }
 
     @Test
@@ -29,7 +32,7 @@ public class CacheEntryValidatorTest {
         cacheEntry.setKey("");
         cacheEntry.setValue("Simple value");
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
-        Assertions.assertEquals("Empty key", exception.getMessage());
+        assertEquals("Empty key", exception.getMessage());
     }
 
     @Test
@@ -37,7 +40,7 @@ public class CacheEntryValidatorTest {
         CacheEntry cacheEntry = new CacheEntry();
         cacheEntry.setKey("key");
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
-        Assertions.assertEquals("Null value", exception.getMessage());
+        assertEquals("Null value", exception.getMessage());
     }
 
     @Test
@@ -46,7 +49,7 @@ public class CacheEntryValidatorTest {
         cacheEntry.setKey("key");
         cacheEntry.setValue("");
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
-        Assertions.assertEquals("Empty value", exception.getMessage());
+        assertEquals("Empty value", exception.getMessage());
     }
 
     @Test
@@ -55,6 +58,14 @@ public class CacheEntryValidatorTest {
         cacheEntry.setKey("key");
         cacheEntry.setValue("NotvalidJsonAtAll");
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
-        Assertions.assertEquals("JSON value is malformed", exception.getMessage());
+        assertEquals("JSON value is malformed", exception.getMessage());
+    }
+
+    @Test
+    public void whenCacheEntryIsValidNoExceptionShouldThrow() {
+        CacheEntry cacheEntry = new CacheEntry();
+        cacheEntry.setKey("key");
+        cacheEntry.setValue("{'name' : 'test'}");
+        assertDoesNotThrow(() -> cacheEntryValidator.validate(cacheEntry));
     }
 }
