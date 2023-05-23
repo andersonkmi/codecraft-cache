@@ -16,31 +16,34 @@ class SimpleCacheRepository implements CacheRepository {
 
     private final Map<String, String> cache = new ConcurrentHashMap<>();
 
-    public void insert(@Nonnull CacheEntry cacheEntry) {
+    public boolean insert(@Nonnull CacheEntry cacheEntry) {
         if (this.cache.containsKey(cacheEntry.getKey())) {
             logger.info("Cache item already present:" + cacheEntry);
-            return;
+            return false;
         }
         logger.info("Inserting new cache item: " + cacheEntry);
         this.cache.put(cacheEntry.getKey(), cacheEntry.getValue());
+        return true;
     }
 
-    public void update(@Nonnull CacheEntry cacheEntry) {
+    public boolean update(@Nonnull CacheEntry cacheEntry) {
         if (!cache.containsKey(cacheEntry.getKey())) {
             logger.warn("Cache item not found: " + cacheEntry);
-            return;
+            return false;
         }
         logger.info("Updating cache item: " + cacheEntry);
         cache.put(cacheEntry.getKey(), cacheEntry.getValue());
+        return true;
     }
 
-    public void remove(@Nonnull String key) {
+    public boolean remove(@Nonnull String key) {
         String value = cache.remove(key);
         if (value == null) {
             logger.warn("Cache item was not in the cache: " + key);
-        } else {
-            logger.info("Cache item has just been removed: " + key);
+            return false;
         }
+        logger.info("Cache item has just been removed: " + key);
+        return true;
     }
 
     public void clear() {

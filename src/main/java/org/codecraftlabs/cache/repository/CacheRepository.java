@@ -6,9 +6,9 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 public interface CacheRepository {
-    void insert(@Nonnull CacheEntry cacheEntry);
-    void update(@Nonnull CacheEntry cacheEntry);
-    void remove(@Nonnull String key);
+    boolean insert(@Nonnull CacheEntry cacheEntry);
+    boolean update(@Nonnull CacheEntry cacheEntry);
+    boolean remove(@Nonnull String key);
     void clear();
     long getCacheSize();
     Optional<CacheEntry> getItem(@Nonnull String key);

@@ -28,10 +28,13 @@ public class CacheService {
      * @param cacheEntry Cache item to be inserted
      * @throws org.codecraftlabs.cache.service.validator.InvalidCacheEntryException If the cache entry does not have
      * either key or value configured.
+     * @throws OperationNotPerformedException If the cache item is already present in the cache
      */
     public void insert(@Nonnull CacheEntry cacheEntry) {
         this.cacheEntryValidator.validate(cacheEntry);
-        this.cacheRepository.insert(cacheEntry);
+        if (!this.cacheRepository.insert(cacheEntry)) {
+            throw new OperationNotPerformedException("Cache item was not inserted. Another item is already linked to the key.");
+        }
     }
 
     /**
