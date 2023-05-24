@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -75,5 +76,12 @@ public class CacheController extends BaseControllerMkI {
         this.cacheService.remove(key);
         CacheResponse response = new CacheResponse("Cache item deleted");
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "/cache/{key}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CacheEntry> get(@PathVariable String key) {
+        return ResponseEntity.notFound().build();
     }
 }
