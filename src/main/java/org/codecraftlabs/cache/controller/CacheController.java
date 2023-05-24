@@ -28,7 +28,9 @@ public class CacheController extends BaseControllerMkI {
         this.cacheService = cacheService;
     }
 
-    @PostMapping(value = "/cache", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/cache",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheResponse> insert(@RequestBody CacheEntry cacheEntry) {
         try {
             this.cacheService.insert(cacheEntry);
@@ -45,7 +47,9 @@ public class CacheController extends BaseControllerMkI {
         }
     }
 
-    @PutMapping(value = "/cache", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/cache",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheResponse> update(@RequestBody CacheEntry cacheEntry) {
         try {
             this.cacheService.update(cacheEntry);
