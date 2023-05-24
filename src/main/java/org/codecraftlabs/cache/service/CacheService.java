@@ -45,7 +45,9 @@ public class CacheService {
      */
     public void update(@Nonnull CacheEntry cacheEntry) {
         this.cacheEntryValidator.validate(cacheEntry);
-        this.cacheRepository.update(cacheEntry);
+        if(!this.cacheRepository.update(cacheEntry)) {
+            throw new OperationNotPerformedException("Cache item was not updated.");
+        }
     }
 
     /**
