@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 @RestController
 public class CacheController extends BaseControllerMkI {
@@ -73,15 +74,17 @@ public class CacheController extends BaseControllerMkI {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheResponse> delete(@PathVariable String key) {
-        this.cacheService.remove(key);
-        CacheResponse response = new CacheResponse("Cache item deleted");
-        return ResponseEntity.ok(response);
+        if(this.cacheService.remove(key)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping(value = "/cache/{key}",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheEntry> get(@PathVariable String key) {
-        return ResponseEntity.notFound().build();
+        Optional<CacheEntry> item = this.cacheService.retrieve(key);
+        return item.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

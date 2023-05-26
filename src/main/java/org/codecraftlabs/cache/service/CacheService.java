@@ -63,8 +63,8 @@ public class CacheService {
      * Removes an item from the cache linked to the specified key.
      * @param key Cache item key.
      */
-    public void remove(@Nonnull String key) {
-        this.cacheRepository.remove(key);
+    public boolean remove(@Nonnull String key) {
+        return this.cacheRepository.remove(key);
     }
 
     /**
