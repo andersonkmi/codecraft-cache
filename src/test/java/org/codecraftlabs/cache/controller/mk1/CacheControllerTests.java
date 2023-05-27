@@ -125,6 +125,16 @@ public class CacheControllerTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @Order(30)
+    @DisplayName("Test to verify the delete operation for non existing item")
+    public void deleteNonExistingCacheItem() throws Exception {
+        mvc.perform(delete("/v1/cache/key999")
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
     @Nonnull
     private JSONObject createUpsertResponse() {
         JSONObject response = new JSONObject();
