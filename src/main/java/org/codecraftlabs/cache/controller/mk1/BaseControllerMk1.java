@@ -1,4 +1,4 @@
-package org.codecraftlabs.cache.controller;
+package org.codecraftlabs.cache.controller.mk1;
 
 import org.codecraftlabs.cache.service.CacheService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,11 +9,11 @@ import javax.annotation.Nonnull;
 
 @RestController
 @RequestMapping("/v1")
-public class BaseControllerMkI {
+public class BaseControllerMk1 {
     @Qualifier("cacheServiceMkI")
     private final CacheService cacheService;
 
-    public BaseControllerMkI(@Nonnull CacheService cacheService) {
+    public BaseControllerMk1(@Nonnull CacheService cacheService) {
         this.cacheService = cacheService;
     }
 

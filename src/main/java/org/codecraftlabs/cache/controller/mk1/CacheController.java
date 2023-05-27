@@ -1,5 +1,7 @@
-package org.codecraftlabs.cache.controller;
+package org.codecraftlabs.cache.controller.mk1;
 
+import org.codecraftlabs.cache.controller.CacheInfoResponse;
+import org.codecraftlabs.cache.controller.CacheResponse;
 import org.codecraftlabs.cache.model.CacheEntry;
 import org.codecraftlabs.cache.service.CacheService;
 import org.codecraftlabs.cache.service.validator.InvalidCacheEntryException;
@@ -20,7 +22,7 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @RestController
-public class CacheController extends BaseControllerMkI {
+public class CacheController extends BaseControllerMk1 {
     private static final Logger logger = LoggerFactory.getLogger(CacheController.class);
 
     @Autowired
