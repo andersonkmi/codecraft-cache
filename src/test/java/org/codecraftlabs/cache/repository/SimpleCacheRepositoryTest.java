@@ -21,7 +21,7 @@ public class SimpleCacheRepositoryTest {
     @Test
     public void testInsertSingleCacheEntrySuccessfully() {
         CacheEntry item = createCacheEntry("key001", "value001");
-        this.simpleCacheRepository.insert(item);
+        this.simpleCacheRepository.upsert(item);
         assertEquals(1, simpleCacheRepository.getCacheSize());
         Optional<CacheEntry> returnedItem = simpleCacheRepository.getItem("key001");
         assertTrue(returnedItem.isPresent());
@@ -35,22 +35,9 @@ public class SimpleCacheRepositoryTest {
     }
 
     @Test
-    public void testInsertExistingItemShouldNotOverwrite() {
-        CacheEntry item = createCacheEntry("key001", "value001");
-        this.simpleCacheRepository.insert(item);
-        assertEquals(1, simpleCacheRepository.getCacheSize());
-        CacheEntry item2 = createCacheEntry("key001", "value002");
-        this.simpleCacheRepository.insert(item2);
-        assertEquals(1, simpleCacheRepository.getCacheSize());
-        Optional<CacheEntry> returnedItem = simpleCacheRepository.getItem("key001");
-        assertTrue(returnedItem.isPresent());
-        assertEquals(item, returnedItem.get());
-    }
-
-    @Test
     public void testUpdateExistingCacheItemSuccess() {
         CacheEntry entry = createCacheEntry("key002", "value002");
-        this.simpleCacheRepository.insert(entry);
+        this.simpleCacheRepository.upsert(entry);
         assertEquals(1, simpleCacheRepository.getCacheSize());
         Optional<CacheEntry> returnedItem = simpleCacheRepository.getItem("key002");
         assertTrue(returnedItem.isPresent());
@@ -58,25 +45,16 @@ public class SimpleCacheRepositoryTest {
 
         // Update an existing item
         entry.setValue("value002 - changed");
-        this.simpleCacheRepository.update(entry);
+        this.simpleCacheRepository.upsert(entry);
         returnedItem = simpleCacheRepository.getItem("key002");
         assertTrue(returnedItem.isPresent());
         assertEquals(entry, returnedItem.get());
     }
 
     @Test
-    public void whenUpdatingNonExistingItemNothingHappens() {
-        CacheEntry entry = createCacheEntry("key002", "value002");
-        this.simpleCacheRepository.update(entry);
-        assertEquals(0, simpleCacheRepository.getCacheSize());
-        Optional<CacheEntry> returnedItem = simpleCacheRepository.getItem("key002");
-        assertTrue(returnedItem.isEmpty());
-    }
-
-    @Test
     public void testRemoveItemFromCache() {
         CacheEntry entry = createCacheEntry("key002", "value002");
-        this.simpleCacheRepository.insert(entry);
+        this.simpleCacheRepository.upsert(entry);
         assertEquals(1, simpleCacheRepository.getCacheSize());
         Optional<CacheEntry> returnedItem = simpleCacheRepository.getItem("key002");
         assertTrue(returnedItem.isPresent());
@@ -89,10 +67,10 @@ public class SimpleCacheRepositoryTest {
     @Test
     public void clearCache() {
         CacheEntry item = createCacheEntry("key001", "value001");
-        this.simpleCacheRepository.insert(item);
+        this.simpleCacheRepository.upsert(item);
         assertEquals(1, simpleCacheRepository.getCacheSize());
         CacheEntry item2 = createCacheEntry("key002", "value002");
-        this.simpleCacheRepository.insert(item2);
+        this.simpleCacheRepository.upsert(item2);
         assertEquals(2, simpleCacheRepository.getCacheSize());
 
         // Clear cache

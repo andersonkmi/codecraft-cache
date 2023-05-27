@@ -10,32 +10,32 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.lang.String.format;
+
 @Repository("simpleCacheRepository")
 class SimpleCacheRepository implements CacheRepository {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCacheRepository.class);
 
     private final Map<String, String> cache = new ConcurrentHashMap<>();
 
-    public boolean insert(@Nonnull CacheEntry cacheEntry) {
-        if (this.cache.containsKey(cacheEntry.getKey())) {
-            logger.info("Cache item already present:" + cacheEntry);
-            return false;
+    @Override
+    public void upsert(@Nonnull CacheEntry cacheEntry) {
+        String previousValue = cache.put(cacheEntry.getKey(), cacheEntry.getValue());
+        if (previousValue != null) {
+            logger.info(format("Cache entry updated - {key: '%s', previousValue: '%s', newValue = '%s'}",
+                    cacheEntry.getKey(),
+                    previousValue,
+                    cacheEntry.getValue())
+            );
+        } else {
+            logger.info(format("Cache entry inserted - {key: '%s', newValue = '%s'}",
+                    cacheEntry.getKey(),
+                    cacheEntry.getValue())
+            );
         }
-        logger.info("Inserting new cache item: " + cacheEntry);
-        this.cache.put(cacheEntry.getKey(), cacheEntry.getValue());
-        return true;
     }
 
-    public boolean update(@Nonnull CacheEntry cacheEntry) {
-        if (!cache.containsKey(cacheEntry.getKey())) {
-            logger.warn("Cache item not found: " + cacheEntry);
-            return false;
-        }
-        logger.info("Updating cache item: " + cacheEntry);
-        cache.put(cacheEntry.getKey(), cacheEntry.getValue());
-        return true;
-    }
-
+    @Override
     public boolean remove(@Nonnull String key) {
         String value = cache.remove(key);
         if (value == null) {
@@ -46,15 +46,18 @@ class SimpleCacheRepository implements CacheRepository {
         return true;
     }
 
+    @Override
     public void clear() {
         logger.info("Removing all cache entries");
         this.cache.clear();
     }
 
+    @Override
     public long getCacheSize() {
         return this.cache.size();
     }
 
+    @Override
     @Nonnull
     public Optional<CacheEntry> getItem(@Nonnull String key) {
         String value = this.cache.get(key);

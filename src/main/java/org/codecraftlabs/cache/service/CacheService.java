@@ -24,30 +24,13 @@ public class CacheService {
     }
 
     /**
-     * Inserts a new item into the cache
-     * @param cacheEntry Cache item to be inserted
-     * @throws org.codecraftlabs.cache.service.validator.InvalidCacheEntryException If the cache entry does not have
-     * either key or value configured.
-     * @throws OperationNotPerformedException If the cache item is already present in the cache
-     */
-    public void insert(@Nonnull CacheEntry cacheEntry) {
-        this.cacheEntryValidator.validate(cacheEntry);
-        if (!this.cacheRepository.insert(cacheEntry)) {
-            throw new OperationNotPerformedException("Cache item was not inserted. Another item is already linked to the key.");
-        }
-    }
-
-    /**
      * Updates an existing item in the cache
      * @param cacheEntry Cache item to be inserted
-     * @throws org.codecraftlabs.cache.service.validator.InvalidCacheEntryException If the cache entry does not have
-     * either key or value configured.
+     * @throws org.codecraftlabs.cache.service.validator.InvalidCacheEntryException If the cache entry is missing the key or value fields
      */
-    public void update(@Nonnull CacheEntry cacheEntry) {
+    public void upsert(@Nonnull CacheEntry cacheEntry) {
         this.cacheEntryValidator.validate(cacheEntry);
-        if(!this.cacheRepository.update(cacheEntry)) {
-            throw new OperationNotPerformedException("Cache item was not updated.");
-        }
+        this.cacheRepository.upsert(cacheEntry);
     }
 
     /**
