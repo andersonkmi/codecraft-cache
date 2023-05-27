@@ -64,4 +64,13 @@ public class CacheController extends BaseControllerMkI {
         Optional<CacheEntry> item = this.cacheService.retrieve(key);
         return item.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping(value = "/cache/size",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CacheResponse> getCacheSize() {
+        long size = this.cacheService.getCacheSize();
+        CacheInfoResponse cacheInfoResponse = new CacheInfoResponse("Current cache size available", size);
+        return ResponseEntity.ok(cacheInfoResponse);
+    }
 }

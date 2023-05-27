@@ -51,9 +51,10 @@ public class CacheService {
     }
 
     /**
-     * Removes all items from the cache.
+     * Returns the current size cache.
+     * @return Number of items inside the cache.
      */
-    public void clear() {
-        this.cacheRepository.clear();
+    public long getCacheSize() {
+        return this.cacheRepository.getCacheSize();
     }
 }
