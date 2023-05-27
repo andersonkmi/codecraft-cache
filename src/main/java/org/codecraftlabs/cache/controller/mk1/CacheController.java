@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @RestController
-public class CacheController extends BaseControllerMk1 {
+public class CacheController extends BaseControllerMkI {
     private static final Logger logger = LoggerFactory.getLogger(CacheController.class);
 
     @Autowired

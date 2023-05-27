@@ -9,11 +9,11 @@ import javax.annotation.Nonnull;
 
 @RestController
 @RequestMapping("/v1")
-public class BaseControllerMk1 {
+public class BaseControllerMkI {
     @Qualifier("cacheServiceMkI")
     private final CacheService cacheService;
 
-    public BaseControllerMk1(@Nonnull CacheService cacheService) {
+    public BaseControllerMkI(@Nonnull CacheService cacheService) {
         this.cacheService = cacheService;
     }
 
