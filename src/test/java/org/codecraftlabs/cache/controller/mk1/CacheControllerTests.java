@@ -12,6 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.annotation.Nonnull;
+
+import java.util.Map;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,9 +36,8 @@ public class CacheControllerTests {
     @Test
     @DisplayName("Test to verify creation of new cache item")
     public void insertCacheItemSuccessful() throws Exception {
-        String requestBody = creteRequest();
-        JSONObject response = new JSONObject();
-        response.put("message", "Done");
+        String requestBody = creteRequest("key001", Map.of("name", "Test Name", "id", "Test Id"));
+        JSONObject response = createUpsertResponse();
         mvc.perform(put("/v1/cache")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
@@ -45,12 +48,48 @@ public class CacheControllerTests {
                 .andExpect(content().json(response.toString()));
     }
 
-    private String creteRequest() {
-        JSONObject something = new JSONObject();
-        something.put("id", "12345");
+    @Test
+    @DisplayName("Test to verify cache item update")
+    public void updateCacheItemSuccessful() throws Exception {
+        JSONObject response = createUpsertResponse();
+        String requestBody1 = creteRequest("key002", Map.of("name", "Test Name 2", "id", "Test Id 2"));
+
+        mvc.perform(put("/v1/cache")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(requestBody1)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().json(response.toString()));
+
+        String requestBody2 = creteRequest("key002", Map.of("name", "Test Name 3", "id", "Test Id 3"));
+        mvc.perform(put("/v1/cache")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(requestBody2)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().json(response.toString()));
+    }
+
+    @Nonnull
+    private JSONObject createUpsertResponse() {
+        JSONObject response = new JSONObject();
+        response.put("message", "Done");
+        return response;
+    }
+
+    @Nonnull
+    private String creteRequest(@Nonnull String key, @Nonnull Map<String, String> values) {
+        JSONObject cacheValue = new JSONObject();
+        for (Map.Entry<String, String> value : values.entrySet()) {
+            cacheValue.put(value.getKey(), value.getValue());
+        }
         JSONObject request = new JSONObject();
-        request.put("key", "key001");
-        request.put("value", something.toString());
+        request.put("key", key);
+        request.put("value", cacheValue.toString());
         return request.toString();
     }
  }
