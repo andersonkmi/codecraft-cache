@@ -33,7 +33,7 @@ public class CacheController extends BaseControllerMkI {
     @PutMapping(value = "/cache",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CacheResponse> update(@RequestBody CacheEntry cacheEntry) {
+    public ResponseEntity<CacheResponse> upsert(@RequestBody CacheEntry cacheEntry) {
         try {
             getCacheService().upsert(cacheEntry);
             CacheResponse response = new CacheResponse("Done");

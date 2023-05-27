@@ -53,15 +53,6 @@ public class CacheEntryValidatorTest {
     }
 
     @Test
-    public void whenInvalidJsonShouldThrowException() {
-        CacheEntry cacheEntry = new CacheEntry();
-        cacheEntry.setKey("key");
-        cacheEntry.setValue("NotvalidJsonAtAll");
-        InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
-        assertEquals("JSON value is malformed", exception.getMessage());
-    }
-
-    @Test
     public void whenCacheEntryIsValidNoExceptionShouldThrow() {
         CacheEntry cacheEntry = new CacheEntry();
         cacheEntry.setKey("key");

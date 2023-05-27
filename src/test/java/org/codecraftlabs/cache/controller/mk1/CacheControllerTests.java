@@ -32,10 +32,7 @@ public class CacheControllerTests {
     @Test
     @DisplayName("Test to verify creation of new cache item")
     public void insertCacheItemSuccessful() throws Exception {
-        String requestBody = "{\n" +
-                "\t\"key\":\"key002\",\n" +
-                "\t\"value\": \"{'name' : 'Anderson'}\"\n" +
-                "}";
+        String requestBody = creteRequest();
         JSONObject response = new JSONObject();
         response.put("message", "Done");
         mvc.perform(put("/v1/cache")
@@ -47,4 +44,13 @@ public class CacheControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().json(response.toString()));
     }
-}
+
+    private String creteRequest() {
+        JSONObject something = new JSONObject();
+        something.put("id", "12345");
+        JSONObject request = new JSONObject();
+        request.put("key", "key001");
+        request.put("value", something.toString());
+        return request.toString();
+    }
+ }
