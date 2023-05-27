@@ -2,6 +2,8 @@ package org.codecraftlabs.cache.model;
 
 import java.util.Objects;
 
+import static java.util.Objects.hash;
+
 public class CacheEntry {
     private String key;
     private String value;
@@ -24,7 +26,7 @@ public class CacheEntry {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.key);
+        return hash(this.key, this.value);
     }
 
     @Override

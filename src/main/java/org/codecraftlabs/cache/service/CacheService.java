@@ -18,6 +18,7 @@ public interface CacheService {
      * @param key Key linked to the cache item
      * @return Cache entry if present, otherwise an empty item.
      */
+    @Nonnull
     Optional<CacheEntry> retrieve(@Nonnull String key);
     /**
      * Removes an item from the cache linked to the specified key.

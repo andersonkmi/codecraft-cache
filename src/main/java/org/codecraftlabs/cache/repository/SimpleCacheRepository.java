@@ -15,7 +15,6 @@ import static java.lang.String.format;
 @Repository("simpleCacheRepository")
 class SimpleCacheRepository implements CacheRepository {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCacheRepository.class);
-
     private final Map<String, String> cache = new ConcurrentHashMap<>();
 
     @Override

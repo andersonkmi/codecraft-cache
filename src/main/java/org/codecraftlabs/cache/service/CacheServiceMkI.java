@@ -40,6 +40,7 @@ class CacheServiceMkI implements CacheService {
      * @return Cache entry if present, otherwise an empty item.
      */
     @Override
+    @Nonnull
     public Optional<CacheEntry> retrieve(@Nonnull String key) {
         return this.cacheRepository.getItem(key);
     }
