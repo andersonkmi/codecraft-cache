@@ -6,7 +6,6 @@ import org.codecraftlabs.cache.service.validator.InvalidCacheEntryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +23,9 @@ import java.util.Optional;
 public class CacheController extends BaseControllerMkI {
     private static final Logger logger = LoggerFactory.getLogger(CacheController.class);
 
-    @Qualifier("cacheServiceMkI")
-    private final CacheService cacheService;
-
     @Autowired
     public CacheController(@Nonnull CacheService cacheService) {
-        this.cacheService = cacheService;
+        super(cacheService);
     }
 
     @PutMapping(value = "/cache",
@@ -37,7 +33,7 @@ public class CacheController extends BaseControllerMkI {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheResponse> update(@RequestBody CacheEntry cacheEntry) {
         try {
-            this.cacheService.upsert(cacheEntry);
+            getCacheService().upsert(cacheEntry);
             CacheResponse response = new CacheResponse("Done");
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (InvalidCacheEntryException exception) {
@@ -51,7 +47,7 @@ public class CacheController extends BaseControllerMkI {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheResponse> delete(@PathVariable String key) {
-        if(this.cacheService.remove(key)){
+        if(this.getCacheService().remove(key)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -61,7 +57,7 @@ public class CacheController extends BaseControllerMkI {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheEntry> get(@PathVariable String key) {
-        Optional<CacheEntry> item = this.cacheService.retrieve(key);
+        Optional<CacheEntry> item = this.getCacheService().retrieve(key);
         return item.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -69,7 +65,7 @@ public class CacheController extends BaseControllerMkI {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheResponse> getCacheSize() {
-        long size = this.cacheService.getCacheSize();
+        long size = this.getCacheService().getCacheSize();
         CacheInfoResponse cacheInfoResponse = new CacheInfoResponse("Current cache size available", size);
         return ResponseEntity.ok(cacheInfoResponse);
     }
