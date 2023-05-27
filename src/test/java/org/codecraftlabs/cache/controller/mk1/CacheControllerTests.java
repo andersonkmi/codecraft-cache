@@ -18,6 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.annotation.Nonnull;
 import java.util.Map;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -112,6 +113,16 @@ public class CacheControllerTests {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json(secondResponse.toString()));
+    }
+
+    @Test
+    @Order(30)
+    @DisplayName("Test to verify the delete operation")
+    public void deleteCacheItem() throws Exception {
+        mvc.perform(delete("/v1/cache/key003")
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Nonnull
