@@ -37,7 +37,7 @@ public class CacheController extends BaseControllerMkI {
         try {
             getCacheService().upsert(cacheEntry);
             CacheResponse response = new CacheResponse("Done");
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.ok(response);
         } catch (InvalidCacheEntryException exception) {
             logger.info("An error occurred when inserting new item into the cache.", exception);
             CacheResponse response = new CacheResponse(exception.getMessage());
