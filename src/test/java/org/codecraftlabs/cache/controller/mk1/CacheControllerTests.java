@@ -3,7 +3,10 @@ package org.codecraftlabs.cache.controller.mk1;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,15 +16,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Nonnull;
-
 import java.util.Map;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CacheControllerTests {
     private MockMvc mvc;
 
@@ -34,6 +38,7 @@ public class CacheControllerTests {
     }
 
     @Test
+    @Order(0)
     @DisplayName("Test to verify creation of new cache item")
     public void insertCacheItemSuccessful() throws Exception {
         String requestBody = creteRequest("key001", Map.of("name", "Test Name", "id", "Test Id"));
@@ -49,6 +54,7 @@ public class CacheControllerTests {
     }
 
     @Test
+    @Order(10)
     @DisplayName("Test to verify cache item update")
     public void updateCacheItemSuccessful() throws Exception {
         JSONObject response = createUpsertResponse();
@@ -74,10 +80,52 @@ public class CacheControllerTests {
                 .andExpect(content().json(response.toString()));
     }
 
+    @Test
+    @Order(20)
+    @DisplayName("Test to verify if the cache size is correct")
+    public void testCacheSizeRetrieval() throws Exception {
+        JSONObject firstResponse = createGetSizeResponse(2);
+        mvc.perform(get("/v1/cache/size")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .accept(MediaType.APPLICATION_JSON)
+            )
+                .andExpect(status().isOk())
+                .andExpect(content().json(firstResponse.toString()));
+
+        JSONObject response = createUpsertResponse();
+        String requestBody = creteRequest("key003", Map.of("name", "Test Name 3", "id", "Test Id 3"));
+        mvc.perform(put("/v1/cache")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().json(response.toString()));
+
+        JSONObject secondResponse = createGetSizeResponse(3);
+        mvc.perform(get("/v1/cache/size")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().json(secondResponse.toString()));
+    }
+
     @Nonnull
     private JSONObject createUpsertResponse() {
         JSONObject response = new JSONObject();
         response.put("message", "Done");
+        return response;
+    }
+
+    @Nonnull
+    private JSONObject createGetSizeResponse(int expectedSize) {
+        JSONObject response = new JSONObject();
+        response.put("message", "Current cache size");
+        response.put("size", expectedSize);
         return response;
     }
 
