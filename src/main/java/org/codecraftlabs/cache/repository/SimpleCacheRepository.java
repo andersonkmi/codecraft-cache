@@ -27,6 +27,9 @@ class SimpleCacheRepository implements CacheRepository {
                     previousValue,
                     cacheEntry.getValue())
             );
+            if (previousValue.equals(cacheEntry.getValue())) {
+                logger.warn(format("Cache item '%s' updated with the same value as before", cacheEntry.getKey()));
+            }
         } else {
             logger.info(format("Cache entry inserted - {key: '%s', newValue = '%s'}",
                     cacheEntry.getKey(),
@@ -62,6 +65,7 @@ class SimpleCacheRepository implements CacheRepository {
     public Optional<CacheEntry> getItem(@Nonnull String key) {
         String value = this.cache.get(key);
         if (value == null) {
+            logger.warn(format("Cache item '%s' not found in the cache.", key));
             return Optional.empty();
         } else {
             CacheEntry cacheEntry = new CacheEntry();
