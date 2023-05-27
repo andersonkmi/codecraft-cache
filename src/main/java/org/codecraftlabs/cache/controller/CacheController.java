@@ -66,7 +66,7 @@ public class CacheController extends BaseControllerMkI {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheResponse> getCacheSize() {
         long size = this.getCacheService().getCacheSize();
-        CacheInfoResponse cacheInfoResponse = new CacheInfoResponse("Current cache size available", size);
+        CacheInfoResponse cacheInfoResponse = new CacheInfoResponse("Current cache size", size);
         return ResponseEntity.ok(cacheInfoResponse);
     }
 }
