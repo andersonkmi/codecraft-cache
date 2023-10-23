@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Nonnull;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -159,7 +161,7 @@ public class CacheControllerTests {
         JSONObject request = new JSONObject();
         request.put("key", key);
         request.put("value", cacheValue.toString());
-        request.put("versionId", 1);
+        request.put("versionId", System.currentTimeMillis());
         return request.toString();
     }
  }
