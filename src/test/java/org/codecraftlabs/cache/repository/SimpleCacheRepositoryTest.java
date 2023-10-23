@@ -44,11 +44,11 @@ public class SimpleCacheRepositoryTest {
         assertEquals(entry, returnedItem.get());
 
         // Update an existing item
-        entry.setValue("value002 - changed");
-        this.simpleCacheRepository.upsert(entry);
+        CacheEntry updatedEntry = createCacheEntry("key002", "value002 - changed");
+        this.simpleCacheRepository.upsert(updatedEntry);
         returnedItem = simpleCacheRepository.getItem("key002");
         assertTrue(returnedItem.isPresent());
-        assertEquals(entry, returnedItem.get());
+        assertEquals(updatedEntry, returnedItem.get());
     }
 
     @Test
@@ -80,9 +80,6 @@ public class SimpleCacheRepositoryTest {
 
     @Nonnull
     private CacheEntry createCacheEntry(@Nonnull String key, @Nonnull String value) {
-        CacheEntry item = new CacheEntry();
-        item.setKey(key);
-        item.setValue(value);
-        return item;
+        return new CacheEntry(key, value, 0);
     }
 }

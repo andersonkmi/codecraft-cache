@@ -20,43 +20,35 @@ public class CacheEntryValidatorTest {
 
     @Test
     public void whenNullKeyShouldRaiseException() {
-        CacheEntry cacheEntry = new CacheEntry();
-        cacheEntry.setValue("Simple value");
+        CacheEntry cacheEntry = new CacheEntry(null, "Simple value", 0);
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
         assertEquals("Null key", exception.getMessage());
     }
 
     @Test
     public void whenEmptyKeyShouldRaiseException() {
-        CacheEntry cacheEntry = new CacheEntry();
-        cacheEntry.setKey("");
-        cacheEntry.setValue("Simple value");
+        CacheEntry cacheEntry = new CacheEntry("", "Simple value", 0);
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
         assertEquals("Empty key", exception.getMessage());
     }
 
     @Test
     public void whenNullValueShouldRaiseException() {
-        CacheEntry cacheEntry = new CacheEntry();
-        cacheEntry.setKey("key");
+        CacheEntry cacheEntry = new CacheEntry("key", null, 0);
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
         assertEquals("Null value", exception.getMessage());
     }
 
     @Test
     public void whenEmptyValueShouldRaiseException() {
-        CacheEntry cacheEntry = new CacheEntry();
-        cacheEntry.setKey("key");
-        cacheEntry.setValue("");
+        CacheEntry cacheEntry = new CacheEntry("key", "", 0);
         InvalidCacheEntryException exception = Assertions.assertThrows(InvalidCacheEntryException.class, () -> cacheEntryValidator.validate(cacheEntry));
         assertEquals("Empty value", exception.getMessage());
     }
 
     @Test
     public void whenCacheEntryIsValidNoExceptionShouldThrow() {
-        CacheEntry cacheEntry = new CacheEntry();
-        cacheEntry.setKey("key");
-        cacheEntry.setValue("{'name' : 'test'}");
+        CacheEntry cacheEntry = new CacheEntry("key", "{'name' : 'test'}", 0);
         assertDoesNotThrow(() -> cacheEntryValidator.validate(cacheEntry));
     }
 }

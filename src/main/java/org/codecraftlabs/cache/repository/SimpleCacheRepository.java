@@ -15,18 +15,18 @@ import static java.lang.String.format;
 @Repository("simpleCacheRepository")
 class SimpleCacheRepository implements CacheRepository {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCacheRepository.class);
-    private final Map<String, String> cache = new ConcurrentHashMap<>();
+    private final Map<String, CacheEntry> cache = new ConcurrentHashMap<>();
 
     @Override
     public void upsert(@Nonnull CacheEntry cacheEntry) {
-        String previousValue = cache.put(cacheEntry.getKey(), cacheEntry.getValue());
+        CacheEntry previousValue = cache.put(cacheEntry.getKey(), cacheEntry);
         if (previousValue != null) {
             logger.info(format("Cache entry updated - {key: '%s', previousValue: '%s', newValue = '%s'}",
                     cacheEntry.getKey(),
                     previousValue,
                     cacheEntry.getValue())
             );
-            if (previousValue.equals(cacheEntry.getValue())) {
+            if (previousValue.equals(cacheEntry)) {
                 logger.warn(format("Cache item '%s' updated with the same value as before", cacheEntry.getKey()));
             }
         } else {
@@ -39,7 +39,7 @@ class SimpleCacheRepository implements CacheRepository {
 
     @Override
     public boolean remove(@Nonnull String key) {
-        String value = cache.remove(key);
+        CacheEntry value = cache.remove(key);
         if (value == null) {
             logger.warn("Cache item was not in the cache: " + key);
             return false;
@@ -62,15 +62,12 @@ class SimpleCacheRepository implements CacheRepository {
     @Override
     @Nonnull
     public Optional<CacheEntry> getItem(@Nonnull String key) {
-        String value = this.cache.get(key);
+        CacheEntry value = this.cache.get(key);
         if (value == null) {
             logger.warn(format("Cache item '%s' not found in the cache.", key));
             return Optional.empty();
         } else {
-            CacheEntry cacheEntry = new CacheEntry();
-            cacheEntry.setKey(key);
-            cacheEntry.setValue(value);
-            return Optional.of(cacheEntry);
+            return Optional.of(value);
         }
     }
 }
