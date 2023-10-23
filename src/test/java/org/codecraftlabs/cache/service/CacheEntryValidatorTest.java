@@ -48,7 +48,7 @@ public class CacheEntryValidatorTest {
 
     @Test
     public void whenCacheEntryIsValidNoExceptionShouldThrow() {
-        CacheEntry cacheEntry = new CacheEntry("key", "{'name' : 'test'}", 0);
+        CacheEntry cacheEntry = new CacheEntry("key", "{'name' : 'test'}", 1);
         assertDoesNotThrow(() -> cacheEntryValidator.validate(cacheEntry));
     }
 }

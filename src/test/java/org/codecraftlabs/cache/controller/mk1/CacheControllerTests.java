@@ -159,6 +159,7 @@ public class CacheControllerTests {
         JSONObject request = new JSONObject();
         request.put("key", key);
         request.put("value", cacheValue.toString());
+        request.put("versionId", 1);
         return request.toString();
     }
  }
