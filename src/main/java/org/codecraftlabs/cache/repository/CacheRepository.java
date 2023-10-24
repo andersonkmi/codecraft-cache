@@ -12,6 +12,8 @@ public interface CacheRepository {
      */
     void upsert(@Nonnull CacheEntry cacheEntry);
 
+    void insert(@Nonnull CacheEntry cacheEntry);
+
     /**
      * Removes an entry from the cache
      * @param key Key of the cache item

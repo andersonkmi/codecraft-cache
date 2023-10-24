@@ -34,6 +34,11 @@ class CacheServiceMkI implements CacheService {
         this.cacheRepository.upsert(cacheEntry);
     }
 
+    @Override
+    public void insert(@Nonnull CacheEntry cacheEntry) {
+        this.cacheRepository.insert(cacheEntry);
+    }
+
     /**
      * Retrieves the cache item associated with the informed key.
      * @param key Key linked to the cache item

@@ -38,6 +38,12 @@ class SimpleCacheRepository implements CacheRepository {
     }
 
     @Override
+    public void insert(@Nonnull CacheEntry cacheEntry) {
+        logger.info("Inserting cache entry");
+        cache.putIfAbsent(cacheEntry.getKey(), cacheEntry);
+    }
+
+    @Override
     public boolean remove(@Nonnull String key) {
         CacheEntry value = cache.remove(key);
         if (value == null) {

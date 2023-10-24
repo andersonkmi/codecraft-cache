@@ -13,6 +13,8 @@ public interface CacheService {
      */
     void upsert(@Nonnull CacheEntry cacheEntry);
 
+    void insert(@Nonnull CacheEntry cacheEntry);
+
     /**
      * Retrieves the cache item associated with the informed key.
      * @param key Key linked to the cache item
