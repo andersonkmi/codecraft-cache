@@ -14,7 +14,6 @@ public class CacheEntryValidator {
     public CacheEntryValidator() {
         policies.add(new CacheEntryKeyValidationPolicy());
         policies.add(new CacheEntryValueValidationPolicy());
-        policies.add(new CacheEntryVersionIdValidationPolicy());
     }
 
     public void validate(@Nonnull CacheEntry cacheEntry) {

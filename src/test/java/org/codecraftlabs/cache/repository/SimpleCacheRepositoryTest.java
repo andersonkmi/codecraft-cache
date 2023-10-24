@@ -80,6 +80,6 @@ public class SimpleCacheRepositoryTest {
 
     @Nonnull
     private CacheEntry createCacheEntry(@Nonnull String key, @Nonnull String value) {
-        return new CacheEntry(key, value, 0);
+        return new CacheEntry(key, value);
     }
 }

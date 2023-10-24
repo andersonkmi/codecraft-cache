@@ -7,12 +7,10 @@ import static java.util.Objects.hash;
 public class CacheEntry {
     final private String key;
     final private String value;
-    final private long versionId;
 
-    public CacheEntry(String key, String value, long versionId) {
+    public CacheEntry(String key, String value) {
         this.key = key;
         this.value = value;
-        this.versionId = versionId;
     }
 
     public String getKey() {
@@ -23,13 +21,10 @@ public class CacheEntry {
         return value;
     }
 
-    public long getVersionId() {
-        return versionId;
-    }
 
     @Override
     public int hashCode() {
-        return hash(this.key, this.value, this.versionId);
+        return hash(this.key, this.value);
     }
 
     @Override
@@ -44,12 +39,11 @@ public class CacheEntry {
 
         CacheEntry instance = (CacheEntry) other;
         return Objects.equals(this.getKey(), instance.getKey()) &&
-                Objects.equals(this.getVersionId(), instance.getVersionId()) &&
                 Objects.equals(getValue(), instance.getValue());
     }
 
     @Override
     public String toString() {
-        return "[key = '" + key + "', value = '" + value + "', versionId = '" + versionId + "']";
+        return "[key = '" + key + "', value = '" + value + "']";
     }
 }
