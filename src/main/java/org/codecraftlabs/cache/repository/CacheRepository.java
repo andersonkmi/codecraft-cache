@@ -10,7 +10,7 @@ public interface CacheRepository {
      * Inserts or updates an entry in the cache
      * @param cacheEntry Cache item to be inserted or updated.
      */
-    void upsert(@Nonnull CacheEntry cacheEntry);
+    Optional<CacheEntry> upsert(@Nonnull CacheEntry cacheEntry);
 
     void insert(@Nonnull CacheEntry cacheEntry);
 

@@ -38,15 +38,20 @@ class CacheServiceMkI implements CacheService {
     @Override
     public void upsert(@Nonnull CacheEntry cacheEntry) {
         this.cacheEntryValidator.validate(cacheEntry);
-        this.cacheRepository.upsert(cacheEntry);
+        Optional<CacheEntry> previousValue = this.cacheRepository.upsert(cacheEntry);
+        Operation operation;
+        if (previousValue.isEmpty()) {
+            operation = Operation.INSERT;
+        } else {
+            operation = Operation.UPDATE;
+        }
+        CacheItemOperation cacheItemOperation = new CacheItemOperation(operation, cacheEntry);
+        this.cacheItemSynchronizer.submitCacheOperation(cacheItemOperation);
     }
 
     @Override
     public void insert(@Nonnull CacheEntry cacheEntry) {
         this.cacheRepository.insert(cacheEntry);
-
-        CacheItemOperation cacheItemOperation = new CacheItemOperation(Operation.INSERT, cacheEntry);
-        this.cacheItemSynchronizer.submitCacheOperation(cacheItemOperation);
     }
 
     /**

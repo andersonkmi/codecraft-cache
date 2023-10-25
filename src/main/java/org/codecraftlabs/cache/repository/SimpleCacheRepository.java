@@ -18,7 +18,7 @@ class SimpleCacheRepository implements CacheRepository {
     private final Map<String, CacheEntry> cache = new ConcurrentHashMap<>();
 
     @Override
-    public void upsert(@Nonnull CacheEntry cacheEntry) {
+    public Optional<CacheEntry> upsert(@Nonnull CacheEntry cacheEntry) {
         CacheEntry previousValue = cache.put(cacheEntry.getKey(), cacheEntry);
         if (previousValue != null) {
             logger.info(format("Cache entry updated - {key: '%s', previousValue: '%s', newValue = '%s'}",
@@ -29,11 +29,13 @@ class SimpleCacheRepository implements CacheRepository {
             if (previousValue.equals(cacheEntry)) {
                 logger.warn(format("Cache item '%s' updated with the same value as before", cacheEntry.getKey()));
             }
+            return Optional.of(previousValue);
         } else {
             logger.info(format("Cache entry inserted - {key: '%s', newValue = '%s'}",
                     cacheEntry.getKey(),
                     cacheEntry.getValue())
             );
+            return Optional.empty();
         }
     }
 
