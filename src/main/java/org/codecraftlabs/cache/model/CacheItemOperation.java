@@ -1,6 +1,7 @@
-package org.codecraftlabs.cache.util;
+package org.codecraftlabs.cache.model;
 
 import org.codecraftlabs.cache.model.CacheEntry;
+import org.codecraftlabs.cache.model.Operation;
 
 import javax.annotation.Nonnull;
 

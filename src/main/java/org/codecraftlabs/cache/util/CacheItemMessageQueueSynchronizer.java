@@ -1,5 +1,6 @@
 package org.codecraftlabs.cache.util;
 
+import org.codecraftlabs.cache.model.CacheItemOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

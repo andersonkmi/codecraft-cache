@@ -34,7 +34,20 @@ public class CacheController extends BaseControllerMkI {
     @PostMapping(value = "/item",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> synchronize(@RequestBody CacheEntry cacheEntry) {
+    public ResponseEntity<String> insert(@RequestBody CacheEntry cacheEntry) {
+        try {
+            getCacheService().insert(cacheEntry);
+            return ResponseEntity.status(HttpStatus.CREATED).body("ok");
+        } catch (InvalidCacheEntryException exception) {
+            logger.info("An error occurred when inserting new item into the cache - synchronization purposes.", exception);
+            return ResponseEntity.badRequest().body("fail");
+        }
+    }
+
+    @PutMapping(value = "/item",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> update(@RequestBody CacheEntry cacheEntry) {
         try {
             getCacheService().insert(cacheEntry);
             return ResponseEntity.status(HttpStatus.CREATED).body("ok");

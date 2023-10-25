@@ -1,4 +1,4 @@
-package org.codecraftlabs.cache.util;
+package org.codecraftlabs.cache.model;
 
 public enum Operation {
     INSERT,
