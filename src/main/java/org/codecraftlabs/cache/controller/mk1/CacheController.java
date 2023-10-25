@@ -34,9 +34,9 @@ public class CacheController extends BaseControllerMkI {
     @PutMapping(value = "/cache",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CacheResponse> upsert(@RequestBody CacheEntry cacheEntry, @RequestHeader(name = "skip-synch", required = false) boolean skipSynchronization) {
+    public ResponseEntity<CacheResponse> upsert(@RequestBody CacheEntry cacheEntry, @RequestHeader(name = "skip-synchronization", required = false) boolean skipSynchronization) {
         try {
-            getCacheService().upsert(cacheEntry);
+            getCacheService().upsert(cacheEntry, skipSynchronization);
             CacheResponse response = new CacheResponse("Done");
             return ResponseEntity.ok(response);
         } catch (InvalidCacheEntryException exception) {
@@ -49,8 +49,8 @@ public class CacheController extends BaseControllerMkI {
     @DeleteMapping(value = "/cache/{key}",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CacheResponse> delete(@PathVariable String key) {
-        if(this.getCacheService().remove(key)){
+    public ResponseEntity<CacheResponse> delete(@PathVariable String key, @RequestHeader(name = "skip-synchronization", required = false) boolean skipSynchronization) {
+        if(this.getCacheService().remove(key, skipSynchronization)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

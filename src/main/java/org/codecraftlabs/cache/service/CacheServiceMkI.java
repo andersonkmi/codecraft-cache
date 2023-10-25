@@ -36,17 +36,19 @@ class CacheServiceMkI implements CacheService {
      * @throws org.codecraftlabs.cache.service.validator.InvalidCacheEntryException If the cache entry is missing the key or value fields
      */
     @Override
-    public void upsert(@Nonnull CacheEntry cacheEntry) {
+    public void upsert(@Nonnull CacheEntry cacheEntry, boolean skipSynchronization) {
         this.cacheEntryValidator.validate(cacheEntry);
         Optional<CacheEntry> previousValue = this.cacheRepository.upsert(cacheEntry);
-        Operation operation;
-        if (previousValue.isEmpty()) {
-            operation = Operation.INSERT;
-        } else {
-            operation = Operation.UPDATE;
+        if (!skipSynchronization) {
+            Operation operation;
+            if (previousValue.isEmpty()) {
+                operation = Operation.INSERT;
+            } else {
+                operation = Operation.UPDATE;
+            }
+            CacheItemOperation cacheItemOperation = new CacheItemOperation(operation, cacheEntry);
+            this.cacheItemSynchronizer.submitCacheOperation(cacheItemOperation);
         }
-        CacheItemOperation cacheItemOperation = new CacheItemOperation(operation, cacheEntry);
-        this.cacheItemSynchronizer.submitCacheOperation(cacheItemOperation);
     }
 
     /**
@@ -65,7 +67,7 @@ class CacheServiceMkI implements CacheService {
      * @param key Cache item key.
      */
     @Override
-    public boolean remove(@Nonnull String key) {
+    public boolean remove(@Nonnull String key, boolean skipSynchronization) {
         return this.cacheRepository.remove(key);
     }
 
