@@ -3,6 +3,9 @@ package org.codecraftlabs.cache.service;
 import org.codecraftlabs.cache.model.CacheEntry;
 import org.codecraftlabs.cache.repository.CacheRepository;
 import org.codecraftlabs.cache.service.validator.CacheEntryValidator;
+import org.codecraftlabs.cache.util.CacheItemOperation;
+import org.codecraftlabs.cache.util.CacheItemSynchronizer;
+import org.codecraftlabs.cache.util.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,13 +17,17 @@ import java.util.Optional;
 class CacheServiceMkI implements CacheService {
     private final CacheEntryValidator cacheEntryValidator;
 
+    @Qualifier("cacheItemMessageQueueSynchronizer")
+    private final CacheItemSynchronizer cacheItemSynchronizer;
+
     @Qualifier("simpleCacheRepository")
     private final CacheRepository cacheRepository;
 
     @Autowired
-    public CacheServiceMkI(@Nonnull CacheEntryValidator cacheEntryValidator, @Nonnull CacheRepository cacheRepository) {
+    public CacheServiceMkI(@Nonnull CacheEntryValidator cacheEntryValidator, @Nonnull CacheRepository cacheRepository, @Nonnull CacheItemSynchronizer cacheItemSynchronizer) {
         this.cacheEntryValidator = cacheEntryValidator;
         this.cacheRepository = cacheRepository;
+        this.cacheItemSynchronizer = cacheItemSynchronizer;
     }
 
     /**
@@ -37,6 +44,9 @@ class CacheServiceMkI implements CacheService {
     @Override
     public void insert(@Nonnull CacheEntry cacheEntry) {
         this.cacheRepository.insert(cacheEntry);
+
+        CacheItemOperation cacheItemOperation = new CacheItemOperation(Operation.INSERT, cacheEntry);
+        this.cacheItemSynchronizer.submitCacheOperation(cacheItemOperation);
     }
 
     /**
