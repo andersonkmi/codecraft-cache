@@ -14,9 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Nonnull;
@@ -31,36 +31,10 @@ public class CacheController extends BaseControllerMkI {
         super(cacheService);
     }
 
-    @PostMapping(value = "/item",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> insert(@RequestBody CacheEntry cacheEntry) {
-        try {
-            getCacheService().insert(cacheEntry);
-            return ResponseEntity.status(HttpStatus.CREATED).body("ok");
-        } catch (InvalidCacheEntryException exception) {
-            logger.info("An error occurred when inserting new item into the cache - synchronization purposes.", exception);
-            return ResponseEntity.badRequest().body("fail");
-        }
-    }
-
-    @PutMapping(value = "/item",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> update(@RequestBody CacheEntry cacheEntry) {
-        try {
-            getCacheService().insert(cacheEntry);
-            return ResponseEntity.status(HttpStatus.CREATED).body("ok");
-        } catch (InvalidCacheEntryException exception) {
-            logger.info("An error occurred when inserting new item into the cache - synchronization purposes.", exception);
-            return ResponseEntity.badRequest().body("fail");
-        }
-    }
-
     @PutMapping(value = "/cache",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CacheResponse> upsert(@RequestBody CacheEntry cacheEntry) {
+    public ResponseEntity<CacheResponse> upsert(@RequestBody CacheEntry cacheEntry, @RequestHeader(name = "skip-synch", required = false) boolean skipSynchronization) {
         try {
             getCacheService().upsert(cacheEntry);
             CacheResponse response = new CacheResponse("Done");
