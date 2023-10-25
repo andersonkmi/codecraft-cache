@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 public class CacheController extends BaseControllerMkI {
     private static final Logger logger = LoggerFactory.getLogger(CacheController.class);
@@ -32,9 +33,10 @@ public class CacheController extends BaseControllerMkI {
     }
 
     @PutMapping(value = "/cache",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CacheResponse> upsert(@RequestBody CacheEntry cacheEntry, @RequestHeader(name = "skip-synchronization", required = false) boolean skipSynchronization) {
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CacheResponse> upsert(@RequestBody CacheEntry cacheEntry,
+                                                @RequestHeader(name = "skip-synchronization", required = false) boolean skipSynchronization) {
         try {
             getCacheService().upsert(cacheEntry, skipSynchronization);
             CacheResponse response = new CacheResponse("Done");
@@ -47,26 +49,27 @@ public class CacheController extends BaseControllerMkI {
     }
 
     @DeleteMapping(value = "/cache/{key}",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CacheResponse> delete(@PathVariable String key, @RequestHeader(name = "skip-synchronization", required = false) boolean skipSynchronization) {
-        if(this.getCacheService().remove(key, skipSynchronization)){
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CacheResponse> delete(@PathVariable String key,
+                                                @RequestHeader(name = "skip-synchronization", required = false) boolean skipSynchronization) {
+        if (this.getCacheService().remove(key, skipSynchronization)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping(value = "/cache/{key}",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheEntry> get(@PathVariable String key) {
         Optional<CacheEntry> item = this.getCacheService().retrieve(key);
         return item.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping(value = "/cache/size",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<CacheResponse> getCacheSize() {
         long size = this.getCacheService().getCacheSize();
         CacheInfoResponse cacheInfoResponse = new CacheInfoResponse("Current cache size", size);

@@ -68,7 +68,13 @@ class CacheServiceMkI implements CacheService {
      */
     @Override
     public boolean remove(@Nonnull String key, boolean skipSynchronization) {
-        return this.cacheRepository.remove(key);
+        boolean result = this.cacheRepository.remove(key);
+        if (result && !skipSynchronization) {
+            CacheEntry cacheEntry = new CacheEntry(key, "");
+            CacheItemOperation cacheItemOperation = new CacheItemOperation(Operation.DELETE, cacheEntry);
+            this.cacheItemSynchronizer.submitCacheOperation(cacheItemOperation);
+        }
+        return result;
     }
 
     /**
