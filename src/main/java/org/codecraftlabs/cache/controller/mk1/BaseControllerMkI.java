@@ -17,7 +17,7 @@ public class BaseControllerMkI {
         this.cacheService = cacheService;
     }
 
-    protected CacheService getCacheService() {
+    CacheService getCacheService() {
         return cacheService;
     }
 }
