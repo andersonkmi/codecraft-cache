@@ -46,4 +46,8 @@ public class CacheEntry {
     public String toString() {
         return "[key = '" + key + "', value = '" + value + "']";
     }
+
+    public String toJson() {
+        return "{'key' = '" + key + "', 'value' = '" + value + "'}";
+    }
 }

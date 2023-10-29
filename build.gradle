@@ -23,12 +23,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.google.guava:guava:31.1-jre'
-	implementation group: 'org.json', name: 'json', version: '20220320'
+	implementation group: 'org.json', name: 'json', version: '20230227'
+
+	// My local dependencies
+	implementation group: 'org.codecraftlabs.cloudlift', name: 'cloud-lift', version: '1.2.1'
 
 	// Test related dependencies
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.hamcrest:hamcrest-library:2.2'
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+
 }
 
 test {
