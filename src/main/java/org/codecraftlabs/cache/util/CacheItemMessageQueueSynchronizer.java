@@ -21,12 +21,14 @@ public class CacheItemMessageQueueSynchronizer implements CacheItemSynchronizer 
 
     public void submitCacheOperation(@Nonnull CacheItemOperation cacheItemOperation) {
         try {
-            logger.info("Submitting cache updates into the queue: " + cacheItemOperation.toJson());
+            String cacheItemJson = cacheItemOperation.toJson();
+            logger.info("Submitting cache updates into the queue: " + cacheItemJson);
+
             SQSService sqsService = SQSService.builder().build();
             String sqsUrl = customConfig.getSqsUrl();
-            sqsService.sendMessage(sqsUrl, cacheItemOperation.toJson());
+            sqsService.sendMessage(sqsUrl, cacheItemJson);
         } catch (SQSException exception) {
-            logger.error("Failed to submit message", exception);
+            logger.warn("Failed to submit message", exception);
         }
     }
 }

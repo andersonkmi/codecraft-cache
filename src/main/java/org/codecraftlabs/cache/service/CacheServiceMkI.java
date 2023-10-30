@@ -24,7 +24,9 @@ class CacheServiceMkI implements CacheService {
     private final CacheRepository cacheRepository;
 
     @Autowired
-    public CacheServiceMkI(@Nonnull CacheEntryValidator cacheEntryValidator, @Nonnull CacheRepository cacheRepository, @Nonnull CacheItemSynchronizer cacheItemSynchronizer) {
+    public CacheServiceMkI(@Nonnull CacheEntryValidator cacheEntryValidator,
+                           @Nonnull CacheRepository cacheRepository,
+                           @Nonnull CacheItemSynchronizer cacheItemSynchronizer) {
         this.cacheEntryValidator = cacheEntryValidator;
         this.cacheRepository = cacheRepository;
         this.cacheItemSynchronizer = cacheItemSynchronizer;
