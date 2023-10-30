@@ -20,10 +20,10 @@ public class CacheItemMessageQueueSynchronizer implements CacheItemSynchronizer 
     }
 
     public void submitCacheOperation(@Nonnull CacheItemOperation cacheItemOperation) {
-        try {
-            String cacheItemJson = cacheItemOperation.toJson();
-            logger.info("Submitting cache updates into the queue: " + cacheItemJson);
+        String cacheItemJson = cacheItemOperation.toJson();
+        logger.info("Submitting cache updates into the queue: " + cacheItemJson);
 
+        try {
             SQSService sqsService = SQSService.builder().build();
             String sqsUrl = customConfig.getSqsUrl();
             sqsService.sendMessage(sqsUrl, cacheItemJson);
