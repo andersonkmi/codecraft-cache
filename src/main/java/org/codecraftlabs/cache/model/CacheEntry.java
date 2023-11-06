@@ -5,8 +5,8 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 public class CacheEntry {
-    final private String key;
-    final private String value;
+    private final String key;
+    private final String value;
 
     public CacheEntry(String key, String value) {
         this.key = key;

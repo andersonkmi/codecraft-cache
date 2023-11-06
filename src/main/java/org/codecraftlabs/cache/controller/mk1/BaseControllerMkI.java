@@ -17,6 +17,7 @@ public class BaseControllerMkI {
         this.cacheService = cacheService;
     }
 
+    @Nonnull
     CacheService getCacheService() {
         return cacheService;
     }
