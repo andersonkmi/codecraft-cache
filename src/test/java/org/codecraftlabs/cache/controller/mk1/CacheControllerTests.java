@@ -1,7 +1,6 @@
 package org.codecraftlabs.cache.controller.mk1;
 
 import org.json.JSONObject;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -12,8 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -28,15 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CacheControllerTests {
-    private MockMvc mvc;
-
     @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @BeforeEach
-    void beforeEach() {
-        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
+    private MockMvc mvc;
 
     @Test
     @Order(0)
