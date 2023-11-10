@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.String.format;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 @Repository("simpleCacheRepository")
 class SimpleCacheRepository implements CacheRepository {
@@ -19,30 +21,30 @@ class SimpleCacheRepository implements CacheRepository {
 
     @Override
     public Optional<CacheEntry> upsert(@Nonnull CacheEntry cacheEntry) {
-        CacheEntry previousValue = cache.put(cacheEntry.getKey(), cacheEntry);
+        CacheEntry previousValue = cache.put(cacheEntry.key(), cacheEntry);
         if (previousValue != null) {
             logger.info(format("Cache entry updated - {key: '%s', previousValue: '%s', newValue = '%s'}",
-                    cacheEntry.getKey(),
+                    cacheEntry.key(),
                     previousValue,
-                    cacheEntry.getValue())
+                    cacheEntry.value())
             );
             if (previousValue.equals(cacheEntry)) {
-                logger.warn(format("Cache item '%s' updated with the same value as before", cacheEntry.getKey()));
+                logger.warn(format("Cache item '%s' updated with the same value as before", cacheEntry.key()));
             }
-            return Optional.of(previousValue);
+            return of(previousValue);
         } else {
             logger.info(format("Cache entry inserted - {key: '%s', newValue = '%s'}",
-                    cacheEntry.getKey(),
-                    cacheEntry.getValue())
+                    cacheEntry.key(),
+                    cacheEntry.value())
             );
-            return Optional.empty();
+            return empty();
         }
     }
 
     @Override
     public void insert(@Nonnull CacheEntry cacheEntry) {
         logger.info("Inserting cache entry");
-        cache.putIfAbsent(cacheEntry.getKey(), cacheEntry);
+        cache.putIfAbsent(cacheEntry.key(), cacheEntry);
     }
 
     @Override
@@ -73,9 +75,9 @@ class SimpleCacheRepository implements CacheRepository {
         CacheEntry value = this.cache.get(key);
         if (value == null) {
             logger.warn(format("Cache item '%s' not found in the cache.", key));
-            return Optional.empty();
+            return empty();
         } else {
-            return Optional.of(value);
+            return of(value);
         }
     }
 }

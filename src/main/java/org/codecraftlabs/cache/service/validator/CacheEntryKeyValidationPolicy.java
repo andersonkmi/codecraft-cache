@@ -7,11 +7,11 @@ import javax.annotation.Nonnull;
 class CacheEntryKeyValidationPolicy implements CacheEntryValidationPolicy {
     @Override
     public void apply(@Nonnull CacheEntry cacheEntry) {
-        if (cacheEntry.getKey() == null) {
+        if (cacheEntry.key() == null) {
             throw new InvalidCacheEntryException("Null key");
         }
 
-        if (cacheEntry.getKey().isEmpty()) {
+        if (cacheEntry.key().isEmpty()) {
             throw new InvalidCacheEntryException("Empty key");
         }
     }
