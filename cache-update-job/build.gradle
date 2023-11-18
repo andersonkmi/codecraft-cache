@@ -22,24 +22,21 @@ java {
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-    // AWS related
-    implementation platform('software.amazon.awssdk:bom:2.5.29')
-    implementation 'software.amazon.awssdk:sqs'
+    implementation 'com.google.guava:guava:31.1-jre'
+    implementation group: 'org.json', name: 'json', version: '20230227'
+    implementation group: 'org.codecraftlabs.cloudlift', name: 'cloud-lift', version: '1.2.1'
+
+    // Test related dependencies
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.0-android'
-
-    // Use JUnit Jupiter API for testing.
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
-    testImplementation 'org.hamcrest:hamcrest-library:2.1'
-
-
-    // Use JUnit Jupiter Engine for testing.
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
 
     implementation 'org.apache.logging.log4j:log4j-api:2.17.1'
     implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
@@ -67,7 +64,7 @@ tasks.register('createUberJar', Jar) {
                 'Implementation-Version': '1.0.0',
                 'Main-Class': 'org.codecraftlabs.sqs.Main'
     }
-    archiveBaseName = 'aws-s3-sqs-all'
+    archiveBaseName = 'cache-update-job'
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }

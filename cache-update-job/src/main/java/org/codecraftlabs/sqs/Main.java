@@ -7,11 +7,8 @@ import org.codecraftlabs.sqs.service.SQSConsumerService;
 import org.codecraftlabs.sqs.util.AppArguments;
 import org.codecraftlabs.sqs.util.CommandLineException;
 import org.codecraftlabs.sqs.util.CommandLineUtil;
-import org.codecraftlabs.sqs.validator.AppArgsValidator;
-import org.codecraftlabs.sqs.validator.InvalidArgumentException;
 
 import static org.codecraftlabs.sqs.util.CommandLineUtil.help;
-import static org.codecraftlabs.sqs.validator.AppArgsValidator.build;
 
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
@@ -70,8 +67,6 @@ public class Main {
         try {
             CommandLineUtil commandLineUtil = new CommandLineUtil();
             AppArguments arguments = commandLineUtil.parse(args);
-            AppArgsValidator cliValidator = build();
-            cliValidator.validate(arguments);
 
             while (true) {
                 var serviceExecutor = new SQSConsumerService();
@@ -86,7 +81,7 @@ public class Main {
             unregisterShutdownHook();
         } catch (AWSException exception) {
             logger.error(exception.getMessage(), exception);
-        } catch (InvalidArgumentException | IllegalArgumentException | CommandLineException exception) {
+        } catch (IllegalArgumentException | CommandLineException exception) {
             logger.error("Failed to parse command line options", exception);
             help();
         }

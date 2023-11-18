@@ -1,5 +1,6 @@
 package org.codecraftlabs.sqs.util;
 
+import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -11,14 +12,15 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.codecraftlabs.sqs.util.AppArguments.SQS_URL_OPTION;
-
 public class CommandLineUtil {
-    private final CommandLineParser commandLineParser;
-    private static final Logger logger = LogManager.getLogger(CommandLineUtil.class);
-    public static final String SQS_URL_OPT = "s";
+    public static final String CONFIGURATION_FILE = "c";
 
-    final private static Options cmdLineOpts = new Options().addRequiredOption(SQS_URL_OPT, SQS_URL_OPTION, true, "SQS url");
+    private static final Logger logger = LogManager.getLogger(CommandLineUtil.class);
+
+    private final CommandLineParser commandLineParser;
+
+    final private static Options cmdLineOpts = new Options()
+            .addRequiredOption(CONFIGURATION_FILE, AppArguments.CONFIGURATION_FILE, true, "Configuration file");
 
     public CommandLineUtil() {
         commandLineParser = new DefaultParser();
@@ -30,9 +32,8 @@ public class CommandLineUtil {
         final Map<String, String> options = new HashMap<>();
 
         try {
-            var cmdLine = commandLineParser.parse(cmdLineOpts, args);
-            options.put(SQS_URL_OPTION, cmdLine.getOptionValue(SQS_URL_OPT));
-
+            CommandLine cmdLine = commandLineParser.parse(cmdLineOpts, args);
+            options.put(AppArguments.CONFIGURATION_FILE, cmdLine.getOptionValue(CONFIGURATION_FILE));
             return new AppArguments(options);
         } catch (ParseException exception) {
             logger.error("Command line parse error", exception);
