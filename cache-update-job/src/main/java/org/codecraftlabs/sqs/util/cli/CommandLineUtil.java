@@ -1,4 +1,4 @@
-package org.codecraftlabs.sqs.util;
+package org.codecraftlabs.sqs.util.cli;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

@@ -2,7 +2,7 @@ package org.codecraftlabs.sqs.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codecraftlabs.sqs.util.AppArguments;
+import org.codecraftlabs.sqs.util.cli.AppArguments;
 
 import javax.annotation.Nonnull;
 

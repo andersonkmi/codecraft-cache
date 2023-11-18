@@ -1,4 +1,4 @@
-package org.codecraftlabs.sqs.util;
+package org.codecraftlabs.sqs.util.cli;
 
 import java.util.Map;
 

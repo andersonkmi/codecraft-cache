@@ -4,11 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codecraftlabs.sqs.service.AWSException;
 import org.codecraftlabs.sqs.service.SQSConsumerService;
-import org.codecraftlabs.sqs.util.AppArguments;
-import org.codecraftlabs.sqs.util.CommandLineException;
-import org.codecraftlabs.sqs.util.CommandLineUtil;
+import org.codecraftlabs.sqs.util.cli.AppArguments;
+import org.codecraftlabs.sqs.util.cli.CommandLineException;
+import org.codecraftlabs.sqs.util.cli.CommandLineUtil;
 
-import static org.codecraftlabs.sqs.util.CommandLineUtil.help;
+import static org.codecraftlabs.sqs.util.cli.CommandLineUtil.help;
 
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
