@@ -26,4 +26,12 @@ public class PropertiesFileReaderTest {
         Optional<String> result = propertiesFileReader.getProperties("someKey");
         Assertions.assertThat(result.isEmpty()).isTrue();
     }
+
+    @Test
+    void return_valid_value_when_loading_file() {
+        propertiesFileReader.loadProperties("src/test/resources/config.properties");
+        Optional<String> result = propertiesFileReader.getProperties("sqsUrl");
+        Assertions.assertThat(result.isPresent()).isTrue();
+        Assertions.assertThat(result.get()).isEqualTo("test.sqs.com");
+    }
 }
