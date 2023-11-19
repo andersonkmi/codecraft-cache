@@ -34,4 +34,11 @@ public class PropertiesFileReaderTest {
         Assertions.assertThat(result.isPresent()).isTrue();
         Assertions.assertThat(result.get()).isEqualTo("test.sqs.com");
     }
+
+    @Test
+    void return_empty_optional_when_key_is_invalid() {
+        propertiesFileReader.loadProperties("src/test/resources/config.properties");
+        Optional<String> result = propertiesFileReader.getProperties("keyNotPresent");
+        Assertions.assertThat(result.isEmpty()).isTrue();
+    }
 }
