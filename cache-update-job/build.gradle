@@ -36,6 +36,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
     testRuntimeOnly('org.junit.platform:junit-platform-launcher:1.9.2')
     testImplementation("org.assertj:assertj-core:3.24.2")
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
 
 
     // This dependency is used by the application.
