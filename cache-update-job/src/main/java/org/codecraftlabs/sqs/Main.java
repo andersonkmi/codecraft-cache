@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codecraftlabs.sqs.service.AWSException;
 import org.codecraftlabs.sqs.service.SQSConsumerService;
+import org.codecraftlabs.sqs.util.JobConfiguration;
+import org.codecraftlabs.sqs.util.PropertiesFileReader;
 import org.codecraftlabs.sqs.util.cli.AppArguments;
 import org.codecraftlabs.sqs.util.cli.CommandLineException;
 import org.codecraftlabs.sqs.util.cli.CommandLineUtil;
@@ -67,10 +69,12 @@ public class Main {
         try {
             CommandLineUtil commandLineUtil = new CommandLineUtil();
             AppArguments arguments = commandLineUtil.parse(args);
+            String configFileName = arguments.option(AppArguments.CONFIGURATION_FILE);
+            JobConfiguration jobConfiguration = new JobConfiguration(new PropertiesFileReader(configFileName));
 
             while (true) {
-                var serviceExecutor = new SQSConsumerService();
-                serviceExecutor.execute(arguments);
+                var serviceExecutor = new SQSConsumerService(jobConfiguration);
+                serviceExecutor.execute();
 
                 if (isVMShuttingDown) {
                     signalReadyToExit();

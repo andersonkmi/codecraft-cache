@@ -44,6 +44,6 @@ public class CommandLineUtil {
     public static void help() {
         var header = "\nAWS SQS producer sandbox app\n";
         var footer = "\nThank you for using\n";
-        new HelpFormatter().printHelp("java -jar aws-sqs-producer-all.jar", header, cmdLineOpts, footer, true);
+        new HelpFormatter().printHelp("java -jar cache-update-job.jar", header, cmdLineOpts, footer, true);
     }
 }
