@@ -14,9 +14,11 @@ public class SQSConsumerService {
     private static final Logger logger = LogManager.getLogger(SQSConsumerService.class);
 
     private final JobConfiguration jobConfiguration;
+    private final SQSService sqsService;
 
-    public SQSConsumerService(@Nonnull JobConfiguration jobConfiguration) {
+    public SQSConsumerService(@Nonnull JobConfiguration jobConfiguration, @Nonnull SQSService sqsService) {
         this.jobConfiguration = jobConfiguration;
+        this.sqsService = sqsService;
     }
 
     public void execute() throws AWSException {
@@ -24,7 +26,6 @@ public class SQSConsumerService {
             return;
         }
         String sqsUrl = jobConfiguration.getQueueUrl().get();
-        SQSService sqsService = SQSService.builder().build();
         Optional<Set<SQSMessage>> messages = sqsService.receiveMessages(sqsUrl, 20);
         if (messages.isEmpty()) {
             return;
