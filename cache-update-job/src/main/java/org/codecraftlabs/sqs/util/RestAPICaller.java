@@ -27,6 +27,7 @@ public class RestAPICaller {
         }
 
         for (String server : servers.get()) {
+            logger.info("Calling API on server '" + server + "'");
             String endpoint = server + "/" + url;
             submitUpdate(endpoint, body);
         }
@@ -48,6 +49,7 @@ public class RestAPICaller {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(endpoint))
                 .header("skip-synchronization", "true")
+                .header("Content-Type", "application/json")
                 .method("PUT", HttpRequest.BodyPublishers.ofString(body))
                 .build();
 

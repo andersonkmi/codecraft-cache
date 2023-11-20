@@ -24,6 +24,6 @@ public class CacheItemOperation {
     }
 
     public String toJson() {
-        return "{'operation'= '" + getOperation().name() + "', 'cacheEntry' = " + getCacheEntry().toJson() + "}";
+        return getOperation().name() + "," + cacheEntry.key() + "," + cacheEntry.value();
     }
 }
