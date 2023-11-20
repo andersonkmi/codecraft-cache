@@ -27,10 +27,7 @@ public class CommandLineUtil {
     }
 
     public AppArguments parse(String[] args) throws CommandLineException {
-        logger.info("Parsing command line arguments");
-
         final Map<String, String> options = new HashMap<>();
-
         try {
             CommandLine cmdLine = commandLineParser.parse(cmdLineOpts, args);
             options.put(AppArguments.CONFIGURATION_FILE, cmdLine.getOptionValue(CONFIGURATION_FILE));

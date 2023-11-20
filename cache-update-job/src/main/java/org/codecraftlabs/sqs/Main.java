@@ -3,10 +3,11 @@ package org.codecraftlabs.sqs;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codecraftlabs.cloudlift.sqs.SQSService;
-import org.codecraftlabs.sqs.service.AWSException;
+import org.codecraftlabs.sqs.service.CacheSynchronizerService;
 import org.codecraftlabs.sqs.service.SQSConsumerService;
 import org.codecraftlabs.sqs.util.JobConfiguration;
 import org.codecraftlabs.sqs.util.PropertiesFileReader;
+import org.codecraftlabs.sqs.util.RestAPICaller;
 import org.codecraftlabs.sqs.util.cli.AppArguments;
 import org.codecraftlabs.sqs.util.cli.CommandLineException;
 import org.codecraftlabs.sqs.util.cli.CommandLineUtil;
@@ -72,10 +73,13 @@ public class Main {
             AppArguments arguments = commandLineUtil.parse(args);
             String configFileName = arguments.option(AppArguments.CONFIGURATION_FILE);
             JobConfiguration jobConfiguration = new JobConfiguration(new PropertiesFileReader(configFileName));
-            SQSConsumerService serviceExecutor = new SQSConsumerService(jobConfiguration, SQSService.builder().build());
+            SQSConsumerService sqsConsumerService = new SQSConsumerService(jobConfiguration, SQSService.builder().build());
+            RestAPICaller restAPICaller = new RestAPICaller(jobConfiguration);
+
+            CacheSynchronizerService cacheSynchronizerService = new CacheSynchronizerService(sqsConsumerService, restAPICaller);
 
             while (true) {
-                serviceExecutor.execute();
+                cacheSynchronizerService.processCacheSynchronization();
                 if (isVMShuttingDown) {
                     signalReadyToExit();
                     break;
@@ -83,8 +87,6 @@ public class Main {
             }
             logger.info("Finishing app");
             unregisterShutdownHook();
-        } catch (AWSException exception) {
-            logger.error(exception.getMessage(), exception);
         } catch (IllegalArgumentException | CommandLineException exception) {
             logger.error("Failed to parse command line options", exception);
             help();
