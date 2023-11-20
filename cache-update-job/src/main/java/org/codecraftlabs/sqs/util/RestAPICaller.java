@@ -1,7 +1,9 @@
 package org.codecraftlabs.sqs.util;
 
+import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.codecraftlabs.sqs.service.CacheEntry;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class RestAPICaller {
         this.jobConfiguration = jobConfiguration;
     }
 
-    public void submitUpdates(@Nonnull String url, @Nonnull String body) {
+    public void submitUpdates(@Nonnull String url, @Nonnull CacheEntry cacheEntry) {
         Optional<Set<String>> servers = jobConfiguration.getCacheNodes();
         if (servers.isEmpty()) {
             return;
@@ -29,7 +31,7 @@ public class RestAPICaller {
         for (String server : servers.get()) {
             logger.info("Calling API on server '" + server + "'");
             String endpoint = server + "/" + url;
-            submitUpdate(endpoint, body);
+            submitUpdate(endpoint, new Gson().toJson(cacheEntry));
         }
     }
 

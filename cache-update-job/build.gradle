@@ -30,6 +30,8 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
     implementation group: 'org.json', name: 'json', version: '20230227'
     implementation group: 'org.codecraftlabs.cloudlift', name: 'cloud-lift', version: '1.2.1'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+
 
     // Test related dependencies
     testImplementation 'org.hamcrest:hamcrest-library:2.2'
