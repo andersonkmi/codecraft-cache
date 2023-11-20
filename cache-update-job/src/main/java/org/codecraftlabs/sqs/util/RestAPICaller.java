@@ -66,6 +66,7 @@ public class RestAPICaller {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(endpoint))
                 .header("skip-synchronization", "true")
+                .header("Content-Type", "application/json")
                 .method("DELETE", HttpRequest.BodyPublishers.noBody())
                 .build();
 
