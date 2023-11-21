@@ -26,8 +26,8 @@ public class CacheSynchronizerService {
     private void processSynchronization(@Nonnull CacheOperation cacheOperation) {
         logger.info("Performing synchronization for '" + cacheOperation.cacheEntry()+ "'");
         switch (cacheOperation.operation()) {
-            case "INSERT", "UPDATE" -> this.restAPICaller.submitUpdates("v1/cache", cacheOperation.cacheEntry());
-            case "DELETE" -> this.restAPICaller.submitDeletes("v1/cache", cacheOperation.cacheEntry().key());
+            case "INSERT", "UPDATE" -> this.restAPICaller.submitUpdates(cacheOperation.cacheEntry());
+            case "DELETE" -> this.restAPICaller.submitDeletes(cacheOperation.cacheEntry().key());
         }
     }
 }

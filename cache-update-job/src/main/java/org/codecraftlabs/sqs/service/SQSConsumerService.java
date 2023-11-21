@@ -27,6 +27,7 @@ public class SQSConsumerService {
 
     @Nonnull
     public Optional<Set<CacheOperation>> retrieveMessages() {
+        logger.info("Retrieving messages from the queue");
         if (jobConfiguration.getQueueUrl().isEmpty()) {
             return Optional.empty();
         }

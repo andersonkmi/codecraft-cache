@@ -22,7 +22,7 @@ public class RestAPICaller {
         this.jobConfiguration = jobConfiguration;
     }
 
-    public void submitUpdates(@Nonnull String url, @Nonnull CacheEntry cacheEntry) {
+    public void submitUpdates(@Nonnull CacheEntry cacheEntry) {
         Optional<Set<String>> servers = jobConfiguration.getCacheNodes();
         if (servers.isEmpty()) {
             return;
@@ -30,20 +30,18 @@ public class RestAPICaller {
 
         for (String server : servers.get()) {
             logger.info("Calling API on server '" + server + "'");
-            String endpoint = server + "/" + url;
-            submitUpdate(endpoint, new Gson().toJson(cacheEntry));
+            submitUpdate(server, new Gson().toJson(cacheEntry));
         }
     }
 
-    public void submitDeletes(@Nonnull String url, @Nonnull String key) {
+    public void submitDeletes(@Nonnull String key) {
         Optional<Set<String>> servers = jobConfiguration.getCacheNodes();
         if (servers.isEmpty()) {
             return;
         }
 
         for (String server : servers.get()) {
-            String endpoint = server + "/" + url + "/" + key;
-            submitDelete(endpoint);
+            submitDelete(server);
         }
     }
 
