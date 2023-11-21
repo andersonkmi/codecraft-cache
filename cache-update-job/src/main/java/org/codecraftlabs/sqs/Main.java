@@ -12,6 +12,8 @@ import org.codecraftlabs.sqs.util.cli.AppArguments;
 import org.codecraftlabs.sqs.util.cli.CommandLineException;
 import org.codecraftlabs.sqs.util.cli.CommandLineUtil;
 
+import javax.annotation.Nonnull;
+
 import static org.codecraftlabs.sqs.util.cli.CommandLineUtil.help;
 
 public class Main {
@@ -69,15 +71,7 @@ public class Main {
     public void start(String[] args) {
         logger.info("Starting app");
         try {
-            CommandLineUtil commandLineUtil = new CommandLineUtil();
-            AppArguments arguments = commandLineUtil.parse(args);
-            String configFileName = arguments.option(AppArguments.CONFIGURATION_FILE);
-            JobConfiguration jobConfiguration = new JobConfiguration(new PropertiesFileReader(configFileName));
-            SQSConsumerService sqsConsumerService = new SQSConsumerService(jobConfiguration, SQSService.builder().build());
-            RestAPICaller restAPICaller = new RestAPICaller(jobConfiguration);
-
-            CacheSynchronizerService cacheSynchronizerService = new CacheSynchronizerService(sqsConsumerService, restAPICaller);
-
+            CacheSynchronizerService cacheSynchronizerService = createService(args);
             while (true) {
                 cacheSynchronizerService.processCacheSynchronization();
                 if (isVMShuttingDown) {
@@ -91,6 +85,17 @@ public class Main {
             logger.error("Failed to parse command line options", exception);
             help();
         }
+    }
+
+    @Nonnull
+    private CacheSynchronizerService createService(String[] args) throws CommandLineException {
+        CommandLineUtil commandLineUtil = new CommandLineUtil();
+        AppArguments arguments = commandLineUtil.parse(args);
+        String configFileName = arguments.option(AppArguments.CONFIGURATION_FILE);
+        JobConfiguration jobConfiguration = new JobConfiguration(new PropertiesFileReader(configFileName));
+        SQSConsumerService sqsConsumerService = new SQSConsumerService(jobConfiguration, SQSService.builder().build());
+        RestAPICaller restAPICaller = new RestAPICaller(jobConfiguration);
+        return new CacheSynchronizerService(sqsConsumerService, restAPICaller);
     }
 
     public static void main(String[] args) {
