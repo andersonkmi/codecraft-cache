@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.codecraftlabs.cloudlift.sqs.SQSMessage;
 import org.codecraftlabs.cloudlift.sqs.SQSService;
 import org.codecraftlabs.sqs.util.JobConfiguration;
-import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
